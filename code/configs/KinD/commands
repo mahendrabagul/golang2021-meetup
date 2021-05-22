@@ -1,0 +1,17 @@
+### Demo
+
+## Create KinD cluster using config file
+kind create cluster --config kind-config.yaml
+
+## Install nginx-ingress-controller
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+
+## Wait till pods for ingress are ready
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=90s
+
+## Add - --enable-ssl-passthrough as an arguement to ingress-nginx-controller in pod spec
+kubectl edit deployment -n ingress-nginx ingress-nginx-controller
+
